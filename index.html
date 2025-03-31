@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Daily Chronicle</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>The Daily Chronicle</h1>
+        <div class="search-controls">
+            <select id="category" onchange="fetchNews()">
+                <option value="general">General</option>
+                <option value="business">Business</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="health">Health</option>
+                <option value="science">Science</option>
+                <option value="sports">Sports</option>
+                <option value="technology">Technology</option>
+            </select>
+            <input type="text" id="search" placeholder="Search headlines...">
+            <button onclick="fetchNews()">Find News</button>
+        </div>
+    </header>
+   
+    <main>
+        <div id="news-container"></div>
+    </main>
+
+    <footer>
+        <p>© 2025 The Daily Chronicle - Bringing you the latest news</p>
+    </footer>
+</body>
+</html>
