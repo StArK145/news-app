@@ -11,43 +11,49 @@ const searchInput = document.getElementById('search');
 function fetchNews() {
     const category = categorySelect.value;
     const query = searchInput.value;
-    
+
     // Show loading state
     newsContainer.innerHTML = '<div class="loading">Loading latest headlines...</div>';
-    
-    // Build URL with parameters
-    let url = `${API_URL}?apiKey=${API_KEY}&pageSize=20`;
-    
+
+    // Use HTTPS and build URL with parameters
+    let url = `https://newsapi.org/v2/top-headlines?apiKey=${API_KEY}&pageSize=20&country=us`;
+
     if (category !== 'general') {
         url += `&category=${category}`;
     }
-    
+
     if (query) {
         url += `&q=${encodeURIComponent(query)}`;
     }
-    
-    url += '&country=us'; // Default to US news
-    
+
     // Fetch data from API
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            displayNews(data.articles);
-        })
-        .catch(error => {
-            newsContainer.innerHTML = `
-                <div class="error-message">
-                    <h3>Could not load news</h3>
-                    <p>${error.message}</p>
-                </div>
-            `;
-        });
+    fetch(url, {
+        headers: {
+            'User-Agent': 'Mozilla/5.0' // Helps bypass some API restrictions
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Network error: ${response.status} - ${response.statusText}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === "error") {
+            throw new Error(data.message || "Failed to fetch news");
+        }
+        displayNews(data.articles);
+    })
+    .catch(error => {
+        newsContainer.innerHTML = `
+            <div class="error-message">
+                <h3>Could not load news</h3>
+                <p>${error.message}</p>
+            </div>
+        `;
+    });
 }
+
 
 // Display news articles
 function displayNews(articles) {
